@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int          @id @default(autoincrement())
+  name       String
+  email      String       @unique
+  password   String
+  role       Role         @default(USER)
+  profile    profile?
+  Membership Membership[] // No @relation here
+}
+
+model Membership {
+  id        Int    @id @default(autoincrement())
+  passwordd String @default("admin123")
+  authorId  Int
+  author    User   @relation(fields: [authorId], references: [id], onDelete: Cascade) // Add onDelete here
+}
+
+model profile {
+  id     Int    @id @default(autoincrement())
+  image  String @default("default-profile.jpg")
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int    @unique
+}
+
+enum Role {
+  USER
+  ADMIN
+}
