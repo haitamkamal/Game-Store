@@ -8,7 +8,7 @@ const hashPassword = async (password) => {
   return await bcrypt.hash(password, 10);
 };
 
-const registerUser = async (name, email, password) => {
+const registerUser = async (name, email, password,uploadFileName=null) => {
  
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
@@ -24,7 +24,8 @@ const registerUser = async (name, email, password) => {
         role:"USER",
         Membership:{
           create:{
-            passwordd:"admin123"
+            passwordd:"admin123",
+            image: uploadFileName || "default-profile.jpg",
           }
         }
       },
@@ -45,6 +46,8 @@ const getUserByEmail = async (email) =>{
 const getUserById = async (id) =>{
   return await prisma.user.findUnique({where:{id}})
 };
+
+
 const upgradeToAdmin = async (userId, passwordd) => {
   try {
     console.log("Checking membership for user ID:", userId); 

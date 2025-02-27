@@ -1,19 +1,28 @@
 const express = require('express');
-const app = express();
+const fileUpload = require("express-fileupload");
 const path = require("path");
 const authorRouter = require('./routes/authorRouter');
 const passport = require('./config/passportConfig');
 const session = require('express-session');
 
+const app = express();
+app.use(fileUpload({
+  limits: { fileSize: 50 * 1024 * 1024 }  
+}));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(session({
-  secret: 'your-secret-key', // Replace with a secure secret
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false } // Set to true if using HTTPS
-}));
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false },
+  })
+);
+app.use(express.static(path.join(__dirname, 'public')));
+ 
 
 // Initialize Passport and session
 app.use(passport.initialize());

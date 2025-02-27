@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+</head>
+<body>
+  <a id="userBtn">
+<img src="/uploads/<%= user.profile?.image || 'default-profile.jpg' %>?t=<%= Date.now() %>" 
+     alt="User Profile" style="width: 30px; height: 30px; border-radius: 50%;">
+
+  </a>
+
+  <div id="usernameContainer" style="display: none;">
+    <p>Username: <%= user.name %> </p>
+    <p>Role :<%= user.role%></p>
+    <a href="/manage-account">manage Account</a>
+  </div>
+
+
+
+
+  <script>
+    const userBtn = document.getElementById("userBtn");
+    const usernameContainer = document.getElementById("usernameContainer");
+
+    userBtn.addEventListener("click", function(event) {
+      event.stopPropagation(); 
+
+      if (usernameContainer.style.display === "none" || usernameContainer.style.display === "") {
+        usernameContainer.style.display = "block"; 
+      } else {
+        usernameContainer.style.display = "none"; 
+      }
+    });
+
+    document.addEventListener("click", function(event) {
+      if (event.target !== userBtn && !usernameContainer.contains(event.target)) {
+        usernameContainer.style.display = "none"; 
+      }
+    });
+
+    usernameContainer.addEventListener("click", function(event) {
+      event.stopPropagation();
+    });
+  </script>
+</body>
+</html>

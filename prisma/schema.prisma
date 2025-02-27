@@ -20,14 +20,14 @@ model User {
   password   String
   role       Role         @default(USER)
   profile    profile?
-  Membership Membership[] // No @relation here
+  Membership Membership[]
 }
 
 model Membership {
   id        Int    @id @default(autoincrement())
   passwordd String @default("admin123")
   authorId  Int
-  author    User   @relation(fields: [authorId], references: [id], onDelete: Cascade) // Add onDelete here
+  author    User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
 model profile {
