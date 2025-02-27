@@ -78,8 +78,7 @@ const updateProfileImage = async (req, res) => {
 
     console.log("Updated profile record:", updatedProfile);
 
-    // ✅ Update the session with new image data
-    req.user.profile = req.user.profile || {}; // Ensure profile exists
+    req.user.profile = req.user.profile || {}; 
     req.user.profile.image = imagePath; 
 
     req.session.save((err) => {
