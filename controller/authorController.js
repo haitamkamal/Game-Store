@@ -2,7 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const path = require("path");
 const fs = require("fs");
-
+const { upgradeToAdmin } = require("../db/query"); 
 
 const uploadDir = path.join(__dirname, "../public/uploads");
 
@@ -78,7 +78,6 @@ const updateProfileImage = async (req, res) => {
 
     console.log("Updated profile record:", updatedProfile);
 
-    // ✅ Update the session with new image data
     req.user.profile = req.user.profile || {}; // Ensure profile exists
     req.user.profile.image = imagePath; 
 

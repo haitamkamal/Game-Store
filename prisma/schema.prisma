@@ -21,6 +21,7 @@ model User {
   role       Role         @default(USER)
   profile    profile?
   Membership Membership[]
+  categories categories[]
 }
 
 model Membership {
@@ -35,6 +36,24 @@ model profile {
   image  String @default("default-profile.jpg")
   user   User   @relation(fields: [userId], references: [id])
   userId Int    @unique
+}
+
+model categories {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  User   User?   @relation(fields: [userId], references: [id])
+  userId Int?
+  games  games[]
+}
+
+model games {
+  id           Int        @id @default(autoincrement())
+  name         String
+  price        Int
+  inStok       Int
+  image        String     @default("default-image-games.jpg")
+  categorie    categories @relation(fields: [categoriesId], references: [id])
+  categoriesId Int
 }
 
 enum Role {

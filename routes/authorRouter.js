@@ -72,6 +72,15 @@ authorRouter.post("/sign-up", async (req, res) => {
   }
 });
 
+authorRouter.get("/log-out",(req,res,next)=>{
+    req.logOut((err)=>{
+      if(err){
+        return next(err);
+      }
+      res.redirect("/");
+    })
+})
+
 // Home route (for authenticated users)
 authorRouter.get("/Home", isAuthenticated, async(req, res) => {
   if (req.user.role === "ADMIN") {

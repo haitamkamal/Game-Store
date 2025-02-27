@@ -8,36 +8,39 @@ const hashPassword = async (password) => {
   return await bcrypt.hash(password, 10);
 };
 
-const registerUser = async (name, email, password,uploadFileName=null) => {
- 
-    const existingUser = await prisma.user.findUnique({ where: { email } });
-    if (existingUser) {
-      return { error: "User already exists" };
-    }
+const registerUser = async (name, email, password, uploadFileName = null) => {
+  const existingUser = await prisma.user.findUnique({ where: { email } });
+  if (existingUser) {
+    return { error: "User already exists" };
+  }
 
-    const hashedPassword = await hashPassword(password);
-    const newUser = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        role:"USER",
-        Membership:{
-          create:{
-            passwordd:"admin123",
-            image: uploadFileName || "default-profile.jpg",
-          }
-        }
+  const hashedPassword = await hashPassword(password);
+
+  const newUser = await prisma.user.create({
+    data: {
+      name,
+      email,
+      password: hashedPassword,
+      role: "USER",
+      profile: {
+        create: {
+          image: uploadFileName || "default-profile.jpg", // Associate image with the profile
+        },
       },
-      include: {
-        profile: true, 
-        Membership:true
+      Membership: {
+        create: {
+          passwordd: "admin123", // No image field here
+        },
       },
-    });
-      console.log("new user created:",newUser)
-      
-    return { message: "User registered", user: newUser };
- 
+    },
+    include: {
+      profile: true,
+      Membership: true,
+    },
+  });
+
+  console.log("New user created:", newUser);
+  return { message: "User registered", user: newUser };
 };
 
 const getUserByEmail = async (email) =>{
@@ -50,27 +53,27 @@ const getUserById = async (id) =>{
 
 const upgradeToAdmin = async (userId, passwordd) => {
   try {
-    console.log("Checking membership for user ID:", userId); 
+    console.log("Checking membership for user ID:", userId);
     const membership = await prisma.membership.findFirst({
       where: { authorId: userId },
     });
 
     if (!membership) {
-      console.log("Membership not found for user ID:", userId); 
+      console.log("Membership not found for user ID:", userId);
       return { success: false, message: "Membership not found" };
     }
 
-    console.log("Membership found:", membership); 
+    console.log("Membership found:", membership);
 
     if (passwordd === membership.passwordd) {
-      console.log("Password matches. Upgrading user to ADMIN..."); 
+      console.log("Password matches. Upgrading user to ADMIN...");
       await prisma.user.update({
         where: { id: userId },
         data: { role: "ADMIN" },
       });
       return { success: true, message: "User upgraded to admin" };
     } else {
-      console.log("Incorrect password entered."); 
+      console.log("Incorrect password entered.");
       return { success: false, message: "Incorrect password" };
     }
   } catch (err) {
@@ -96,7 +99,6 @@ const fixMissingMemberships = async () => {
     }
   }
 };
-
 fixMissingMemberships()
   .catch((err) => console.error("Error fixing memberships:", err))
   .finally(() => prisma.$disconnect());
