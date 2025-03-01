@@ -49,10 +49,10 @@ model categories {
 model games {
   id           Int        @id @default(autoincrement())
   name         String
-  price        Int
+  price        Float
   inStok       Int
-  image        String     @default("default-image-games.jpg")
-  categorie    categories @relation(fields: [categoriesId], references: [id])
+  image        String?    @default("default-image-games.jpg")
+  categories   categories @relation(fields: [categoriesId], references: [id])
   categoriesId Int
 }
 

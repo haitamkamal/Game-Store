@@ -24,12 +24,12 @@ const registerUser = async (name, email, password, uploadFileName = null) => {
       role: "USER",
       profile: {
         create: {
-          image: uploadFileName || "default-profile.jpg", // Associate image with the profile
+          image: uploadFileName || "default-profile.jpg", 
         },
       },
       Membership: {
         create: {
-          passwordd: "admin123", // No image field here
+          passwordd: "admin123", 
         },
       },
     },
@@ -104,9 +104,73 @@ fixMissingMemberships()
   .finally(() => prisma.$disconnect());
 
 
+const addCategoryQuery = async (name) => {
+  try {
+    const existingCategory = await prisma.categories.findUnique({
+      where: { name },
+    });
+
+    if (existingCategory) {
+      throw new Error(`Category with name '${name}' already exists`);
+    }
+
+    const newCategory = await prisma.categories.create({
+      data: { name },
+    });
+    return newCategory;
+  } catch (err) {
+    console.error("Error adding category:", err);
+    throw err;
+  }
+};
+
+const getCategoriesQuery = async () => {
+  try {
+    const categories = await prisma.categories.findMany();
+    return categories;
+  } catch (err) {
+    console.error("Error fetching categories:", err);
+    throw err;
+  }
+};
+
+const addGameQuery = async (gameData) => {
+  try {
+    const { name, price, inStok, categoriesId } = gameData;
+
+
+    const priceAsFloat = parseFloat(price);
+    const inStokAsInt = parseInt(inStok);
+    const categoryIdAsInt = parseInt(categoriesId);
+
+    if (!name || isNaN(priceAsFloat) || isNaN(inStokAsInt) || isNaN(categoryIdAsInt)) {
+      throw new Error("Invalid game data received.");
+    }
+
+    const newGame = await prisma.games.create({
+      data: {
+        name,
+        price: priceAsFloat, 
+        inStok: inStokAsInt,
+        image: "default-game-image.jpg", 
+        categoriesId: categoryIdAsInt,
+      },
+    });
+
+    return newGame;
+  } catch (err) {
+    console.error("Error adding game:", err);
+    throw err;
+  }
+};
+
 module.exports ={
   registerUser,
   getUserByEmail,
   getUserById,
-  upgradeToAdmin
+  upgradeToAdmin,
+  addCategoryQuery,
+  getCategoriesQuery,
+  addGameQuery
+ 
 }

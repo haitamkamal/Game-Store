@@ -2,7 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const path = require("path");
 const fs = require("fs");
-const { upgradeToAdmin } = require("../db/query"); 
+const { upgradeToAdmin,addCategoryQuery,getCategoriesQuery,addGameQuery } = require("../db/query"); 
 
 const uploadDir = path.join(__dirname, "../public/uploads");
 
@@ -89,7 +89,45 @@ const updateProfileImage = async (req, res) => {
     });
 };
 
+const addCategory = async (req, res) => {
+  const { name } = req.body;
+
+  try {
+    const newCategory = await addCategoryQuery(name);
+    console.log("New category added:", newCategory);
+    res.redirect("/Home"); 
+  } catch (err) {
+    console.error("Error adding category:", err);
+    res.status(400).send(`Failed to add category: ${err.message}`); 
+  }
+};
+
+const getCategories = async (req, res) => {
+  try {
+    const categories = await getCategoriesQuery();
+    res.json(categories); 
+  } catch (err) {
+    console.error("Error fetching categories:", err);
+    res.status(500).send("Failed to fetch categories");
+  }
+};
+
+const addGame = async (gameData, res) => {
+  try {
+    const newGame = await addGameQuery(gameData);
+    res.status(201).json({ message: "Game added successfully", game: newGame });
+  } catch (err) {
+    console.error("Error adding game:", err);
+    res.status(500).send("Failed to add game");
+  }
+};
+
+
 module.exports = {
   handleMembership,
-  updateProfileImage
+  updateProfileImage,
+  addCategory,
+  getCategories,
+  addGame
+  
 };

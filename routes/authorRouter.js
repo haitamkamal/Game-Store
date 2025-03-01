@@ -1,8 +1,9 @@
 const { Router } = require('express');
 const passport = require('passport');
 const authorRouter = Router();
-const { registerUser } = require('../db/query');
-const { handleMembership,updateProfileImage } = require('../controller/authorController');
+const { registerUser,addGameQuery } = require('../db/query');
+const { handleMembership,updateProfileImage, addCategory,getCategories,  } = require('../controller/authorController');
+
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
@@ -82,15 +83,16 @@ authorRouter.get("/log-out",(req,res,next)=>{
 })
 
 // Home route (for authenticated users)
-authorRouter.get("/Home", isAuthenticated, async(req, res) => {
+authorRouter.get("/Home", isAuthenticated, async (req, res) => {
   if (req.user.role === "ADMIN") {
-    return res.redirect("/Home-admin"); 
+    return res.redirect("/Home-admin");
   }
   const user = await prisma.user.findUnique({
-      where: { id: req.user.id },
-      include: { profile: true }, 
-    });
-  res.render("Home",{user});
+    where: { id: req.user.id },
+    include: { profile: true },
+  });
+  const categories = await prisma.categories.findMany();
+  res.render("Home", { user,categories});
 });
 
 // Membership route (for authenticated users)
@@ -107,10 +109,11 @@ authorRouter.get("/Home-admin", isAuthenticated, async(req, res) => {
     return res.redirect("/Home"); 
   }
    const user = await prisma.user.findUnique({
-      where: { id: req.user.id },
+      where: { id: req.user.id, },
       include: { profile: true }, 
     });
-  res.render("adminHome",{user});
+    const categories = await prisma.categories.findMany();
+  res.render("adminHome", { user, categories });
 });
 
 // Debugging route to check the current user
@@ -134,5 +137,24 @@ authorRouter.get("/manage-account", isAuthenticated, async (req, res) => {
 
 
 authorRouter.post("/update-profile-image", isAuthenticated ,updateProfileImage);
+
+
+authorRouter.post("/add-categories",isAuthenticated,addCategory);
+
+authorRouter.get("/categories", isAuthenticated, getCategories);
+
+authorRouter.post("/add-games", async (req, res) => {
+  try {
+    console.log("Received form data:", req.body); // Debugging: Check what you're getting
+
+    const newGame = await addGameQuery(req.body);
+    res.status(201).json({ message: "Game added successfully", game: newGame });
+  } catch (err) {
+    console.error("Error adding game:", err);
+    res.status(500).send("Failed to add game");
+  }
+});
+
+
 
 module.exports = authorRouter;

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Games</title>
+</head>
+<body>
+  <h1>Add a New Game</h1>
+<form action="/add-games" method="post">
+
+    <label for="name">Game Name:</label><br>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="price">Price:</label><br>
+    <input type="number" id="price" name="price" required><br><br>
+
+    <label for="inStok">In Stock:</label><br>
+    <input type="number" id="inStok" name="inStok" required><br><br>
+
+    <label for="categoriesId">Category:</label><br>
+    <select id="categoriesId" name="categoriesId" required>
+      <!-- Options loaded dynamically -->
+    </select><br><br>
+
+    <label for="image">Upload Image:</label><br>
+    <input type="file" id="image" name="image" accept="image/*" required><br><br>
+
+    <button type="submit">Add Game</button>
+  </form>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const response = await fetch("/categories");
+      const categories = await response.json();
+      const categoriesSelect = document.getElementById("categoriesId");
+      categoriesSelect.innerHTML = "";
+      categories.forEach((category) => {
+        const option = document.createElement("option");
+        option.value = category.id;
+        option.textContent = category.name;
+        categoriesSelect.appendChild(option);
+      });
+    });
+  </script>
+</body>
+</html>
