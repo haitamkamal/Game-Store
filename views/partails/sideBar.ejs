@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Document</title>
-    <style>
-      #categoryForm {
-        display: none;
-      }
-    </style>
+  <title>Add Category</title>
+  <style>
+    #categoryForm {
+      display: none; 
+    }
+  </style>
 </head>
 <body>
-    <h2>Categories</h2>
-
+  <h2>Categories</h2>
+  <ul>
     <% categories.forEach(category => { %>
-      <li> <a href=""> <%= category.name %></a></li>
+      <li><a href=""><%= category.name %></a></li>
     <% }); %>
+  </ul>
 
 
 
@@ -25,33 +25,35 @@
 
 
 
-    
 
-    <button id="toggleFormButton" >+</button>
-<form id="categoryForm" action="/add-categories" method="post" onsubmit="return validateForm()">
-  <label for="name">Enter a category</label>
-  <input type="text" name="name" id="name" required>
-  <button type="submit">Add</button>
-</form>
+  <button id="toggleCategoryFormButton">+</button> 
+  <form id="categoryForm" action="/add-categories" method="post" onsubmit="return validateForm()">
+    <label for="name">Enter a category</label>
+    <input type="text" name="name" id="name" required>
+    <button type="submit">Add</button>
+  </form>
 
-    <script>
-      const toggleFormButton = document.getElementById("toggleFormButton");
-      const categoryForm = document.getElementById("categoryForm");
-      toggleFormButton.addEventListener("click",function(){
-        if(categoryForm.style.display==="none"||categoryForm.style.display===""){
-          categoryForm.style.display="block";
-        } else{
-          categoryForm.style.display="none";
-        }
-      })
-   function validateForm() {
-    const name = document.getElementById('name').value.trim();
-    if (!name) {
-      alert('Category name cannot be empty');
-      return false;
+  <script>
+   
+    const toggleCategoryFormButton = document.getElementById("toggleCategoryFormButton"); 
+    const categoryForm = document.getElementById("categoryForm");
+
+    toggleCategoryFormButton.addEventListener("click", function () {
+      if (categoryForm.style.display === "none" || categoryForm.style.display === "") {
+        categoryForm.style.display = "block";
+      } else {
+        categoryForm.style.display = "none";
+      }
+    });
+
+    function validateForm() {
+      const name = document.getElementById('name').value.trim();
+      if (!name) {
+        alert('Category name cannot be empty');
+        return false;
+      }
+      return true;
     }
-    return true;
-  }
-    </script>
+  </script>
 </body>
 </html>

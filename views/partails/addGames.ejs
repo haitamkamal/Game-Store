@@ -4,11 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Games</title>
+  <style>
+    #gameForm {
+      display: none; 
+    }
+  </style>
 </head>
 <body>
-  <h1>Add a New Game</h1>
-<form action="/add-games" method="post">
-
+  <button id="toggleGameFormButton">+</button> 
+  
+  <form id="gameForm" action="/add-games" method="post">
+    <h1>Add a New Game</h1>
     <label for="name">Game Name:</label><br>
     <input type="text" id="name" name="name" required><br><br>
 
@@ -20,17 +26,18 @@
 
     <label for="categoriesId">Category:</label><br>
     <select id="categoriesId" name="categoriesId" required>
-      <!-- Options loaded dynamically -->
+    
     </select><br><br>
 
     <label for="image">Upload Image:</label><br>
-    <input type="file" id="image" name="image" accept="image/*" required><br><br>
+    <input type="file" id="image" name="image" accept="image/*"><br><br>
 
     <button type="submit">Add Game</button>
   </form>
 
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
+      
       const response = await fetch("/categories");
       const categories = await response.json();
       const categoriesSelect = document.getElementById("categoriesId");
@@ -40,6 +47,18 @@
         option.value = category.id;
         option.textContent = category.name;
         categoriesSelect.appendChild(option);
+      });
+
+
+      const toggleGameFormButton = document.getElementById("toggleGameFormButton");
+      const gameForm = document.getElementById("gameForm");
+
+      toggleGameFormButton.addEventListener("click", () => {
+        if (gameForm.style.display === "none" || gameForm.style.display === "") {
+          gameForm.style.display = "block";
+        } else {
+          gameForm.style.display = "none";
+        }
       });
     });
   </script>
