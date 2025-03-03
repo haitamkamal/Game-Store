@@ -13,7 +13,8 @@
 <body>
   <button id="toggleGameFormButton">+</button> 
   
-  <form id="gameForm" action="/add-games" method="post">
+  <form id="gameForm" action="/add-games" method="post" enctype="multipart/form-data">
+
     <h1>Add a New Game</h1>
     <label for="name">Game Name:</label><br>
     <input type="text" id="name" name="name" required><br><br>

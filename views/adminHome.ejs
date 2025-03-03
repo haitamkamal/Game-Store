@@ -10,6 +10,22 @@
  <%- include('./partails/sideBar')%>
  <%- include('./partails/addGames')%>
 
+          <h2>Available Games</h2>
+<ul>
+  <% games.forEach(game => { %>
+    <li>
+      <strong><%= game.name %></strong> - $<%= game.price %>
+      <br>
+      In Stock: <%= game.inStok %>
+      <br>
+      Category: <%= game.categoryIdAsInt%>
+      <br>
+   <img src="<%= game.image || 'default-image-games.jpg' %>" alt="<%= game.name %>" width="150">
+
+
+    </li>
+  <% }) %>
+</ul>
 
     
 </body>

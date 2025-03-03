@@ -2,7 +2,7 @@ const { Router } = require('express');
 const passport = require('passport');
 const authorRouter = Router();
 const { registerUser,addGameQuery } = require('../db/query');
-const { handleMembership,updateProfileImage, addCategory,getCategories,  } = require('../controller/authorController');
+const { handleMembership,updateProfileImage, addCategory,getCategories,addGame  } = require('../controller/authorController');
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
@@ -91,8 +91,13 @@ authorRouter.get("/Home", isAuthenticated, async (req, res) => {
     where: { id: req.user.id },
     include: { profile: true },
   });
-  const categories = await prisma.categories.findMany();
-  res.render("Home", { user,categories});
+  const categories = await prisma.categories.findMany()
+  const games = await prisma.games.findMany({
+    include:{
+      categories:true
+    }
+  })
+  res.render("Home", { user,categories,games});
 });
 
 // Membership route (for authenticated users)
@@ -113,7 +118,12 @@ authorRouter.get("/Home-admin", isAuthenticated, async(req, res) => {
       include: { profile: true }, 
     });
     const categories = await prisma.categories.findMany();
-  res.render("adminHome", { user, categories });
+     const games = await prisma.games.findMany({
+    include:{
+      categories:true
+    }
+  })
+      res.render("adminHome", { user, categories,games });
 });
 
 // Debugging route to check the current user
@@ -143,12 +153,11 @@ authorRouter.post("/add-categories",isAuthenticated,addCategory);
 
 authorRouter.get("/categories", isAuthenticated, getCategories);
 
-authorRouter.post("/add-games", async (req, res) => {
-  try {
-    console.log("Received form data:", req.body); // Debugging: Check what you're getting
 
-    const newGame = await addGameQuery(req.body);
-    res.status(201).json({ message: "Game added successfully", game: newGame });
+authorRouter.post("/add-games", isAuthenticated, async (req, res) => {
+  try {
+    console.log("Received form data:", req.body);
+    await addGame(req.body, req, res);
   } catch (err) {
     console.error("Error adding game:", err);
     res.status(500).send("Failed to add game");

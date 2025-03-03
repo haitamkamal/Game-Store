@@ -136,8 +136,7 @@ const getCategoriesQuery = async () => {
 
 const addGameQuery = async (gameData) => {
   try {
-    const { name, price, inStok, categoriesId } = gameData;
-
+    const { name, price, inStok, categoriesId, uploadFileName } = gameData;
 
     const priceAsFloat = parseFloat(price);
     const inStokAsInt = parseInt(inStok);
@@ -150,9 +149,9 @@ const addGameQuery = async (gameData) => {
     const newGame = await prisma.games.create({
       data: {
         name,
-        price: priceAsFloat, 
+        price: priceAsFloat,
         inStok: inStokAsInt,
-        image: "default-game-image.jpg", 
+        image: uploadFileName || "default-image-games.jpg",
         categoriesId: categoryIdAsInt,
       },
     });
@@ -163,6 +162,7 @@ const addGameQuery = async (gameData) => {
     throw err;
   }
 };
+
 
 module.exports ={
   registerUser,

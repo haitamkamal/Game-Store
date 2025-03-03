@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
-  
+   
 </head>
 <body>
         <nav class="navbar is-flex is-justify-content-flex-end" role="navigation" aria-label="main navigation">
@@ -14,6 +14,28 @@
            
     <%- include('./partails/sideBar')%>
     <%- include('./partails/addGames')%>
+
+  <h1>Welcome, <%= user.name %>!</h1>
+  <h2>Games</h2>
+  <div class="game-list">
+    <% if (games && games.length > 0) { %>
+      
+      <% games.forEach(game => { %>
+        <div >
+          <h3><%= game.name %></h3>
+
+          <p>Price: $<%= game.price %></p>
+
+          <p>In Stock: <%= game.inStok %></p>
+
+          <img src="/uploads/default-image-games.jpg" alt="Game Name">
+        </div>
+      <% }); %>
+    <% } else { %>
+      <p>No games available.</p>
+    <% } %>
+  </div>
+
     <p>if you wana be a vip member <a href="/memberShip">go here</a></p>
 </body>
 </html>

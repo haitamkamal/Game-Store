@@ -4,6 +4,10 @@ const path = require("path");
 const fs = require("fs");
 const { upgradeToAdmin,addCategoryQuery,getCategoriesQuery,addGameQuery } = require("../db/query"); 
 
+const util = require('util');
+const stream = require('stream');
+const pipeline = util.promisify(stream.pipeline);
+
 const uploadDir = path.join(__dirname, "../public/uploads");
 
 
@@ -112,10 +116,15 @@ const getCategories = async (req, res) => {
   }
 };
 
-const addGame = async (gameData, res) => {
+const addGame = async (gameData, req, res) => {
   try {
-    const newGame = await addGameQuery(gameData);
-    res.status(201).json({ message: "Game added successfully", game: newGame });
+    await addGameQuery(gameData);
+
+    if (req.user.role === "ADMIN") {
+      res.redirect("/Home-admin");
+    } else {
+      res.redirect("/Home");
+    }
   } catch (err) {
     console.error("Error adding game:", err);
     res.status(500).send("Failed to add game");
