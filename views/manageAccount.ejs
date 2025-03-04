@@ -1,27 +1,50 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manage Your Account</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
 </head>
 <body>
-    <a href="/Home">X</a>
+  <section class="section">
+    <div class="container">
+      
+      <a href="/Home" class="button is-small is-light">X</a>
 
-    <h2>Details</h2>
-    <p>Profile</p>
-    <p>Username: <%= user.name %></p>
-
-    <img src="/uploads/<%= user.profile?.image || 'default-profile.jpg' %>?t=<%= Date.now() %>" alt="User Profile" style="width: 50px; height: 50px; border-radius: 50%;">
     
-    <form action="/update-profile-image" method="POST" enctype="multipart/form-data">
-        <label class="label">Update Profile Image</label>
+      <h2 class="title is-2">Details</h2>
 
-          <input class="input" type="file" name="profileImage" accept="image/*" required>
+      
+      <div class="box">
+        <h3 class="title is-4">Profile</h3>
+        <p class="subtitle is-6">Username: <%= user.name %></p>
 
-          <button type="submit">Upload</button>
-    </form>
-  
+        
+        <div class="media">
+          <div class="media-left">
+            <figure class="image is-64x64">
+              <img src="/uploads/<%= user.profile?.image || 'default-profile.jpg' %>?t=<%= Date.now() %>" alt="User Profile" class="is-rounded">
+            </figure>
+          </div>
+        </div>
+
+        
+        <form action="/update-profile-image" method="POST" enctype="multipart/form-data">
+          <div class="field">
+            <label class="label">Update Profile Image</label>
+            <div class="control">
+              <input class="input" type="file" name="profileImage" accept="image/*" required>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <button type="submit" class="button is-dark">Upload</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
 </body>
 </html>

@@ -4,37 +4,87 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Games</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
   <style>
-    #gameForm {
-      display: none; 
+    
+    .modal {
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.is-active {
+      display: flex;
+    }
+
+    .modal-card {
+      width: 90%;
+      max-width: 500px; 
     }
   </style>
 </head>
 <body>
-  <button id="toggleGameFormButton">+</button> 
   
-  <form id="gameForm" action="/add-games" method="post" enctype="multipart/form-data">
+  <button id="toggleGameFormButton" class="button is-primary">+</button>
 
-    <h1>Add a New Game</h1>
-    <label for="name">Game Name:</label><br>
-    <input type="text" id="name" name="name" required><br><br>
+  <div id="gameModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Add a New Game</p>
+        <button class="delete" aria-label="close" id="closeGameModalButton"></button>
+      </header>
+      <section class="modal-card-body">
+        
+        <form id="gameForm" action="/add-games" method="post" enctype="multipart/form-data">
+          <div class="field">
+            <label class="label" for="name">Game Name:</label>
+            <div class="control">
+              <input class="input" type="text" id="name" name="name" required>
+            </div>
+          </div>
 
-    <label for="price">Price:</label><br>
-    <input type="number" id="price" name="price" required><br><br>
+          <div class="field">
+            <label class="label" for="price">Price:</label>
+            <div class="control">
+              <input class="input" type="number" id="price" name="price" required>
+            </div>
+          </div>
 
-    <label for="inStok">In Stock:</label><br>
-    <input type="number" id="inStok" name="inStok" required><br><br>
+          <div class="field">
+            <label class="label" for="inStok">In Stock:</label>
+            <div class="control">
+              <input class="input" type="number" id="inStok" name="inStok" required>
+            </div>
+          </div>
 
-    <label for="categoriesId">Category:</label><br>
-    <select id="categoriesId" name="categoriesId" required>
-    
-    </select><br><br>
+          <div class="field">
+            <label class="label" for="categoriesId">Category:</label>
+            <div class="control">
+              <div class="select">
+                <select id="categoriesId" name="categoriesId" required>
+                  
+                </select>
+              </div>
+            </div>
+          </div>
 
-    <label for="image">Upload Image:</label><br>
-    <input type="file" id="image" name="image" accept="image/*" required><br><br>
+          <div class="field">
+            <label class="label" for="image">Upload Image:</label>
+            <div class="control">
+              <input class="input" type="file" id="image" name="image" accept="image/*" required>
+            </div>
+          </div>
 
-    <button type="submit">Add Game</button>
-  </form>
+          <div class="field">
+            <div class="control">
+              <button class="button is-dark" type="submit">Add Game</button>
+            </div>
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
@@ -50,15 +100,23 @@
         categoriesSelect.appendChild(option);
       });
 
-
+      // Toggle Modal
       const toggleGameFormButton = document.getElementById("toggleGameFormButton");
-      const gameForm = document.getElementById("gameForm");
+      const gameModal = document.getElementById("gameModal");
+      const closeGameModalButton = document.getElementById("closeGameModalButton");
 
       toggleGameFormButton.addEventListener("click", () => {
-        if (gameForm.style.display === "none" || gameForm.style.display === "") {
-          gameForm.style.display = "block";
-        } else {
-          gameForm.style.display = "none";
+        gameModal.classList.add("is-active");
+      });
+
+      closeGameModalButton.addEventListener("click", () => {
+        gameModal.classList.remove("is-active"); 
+      });
+
+     
+      gameModal.addEventListener("click", (e) => {
+        if (e.target === gameModal) {
+          gameModal.classList.remove("is-active");
         }
       });
     });

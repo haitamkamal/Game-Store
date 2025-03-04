@@ -4,19 +4,47 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
 </head>
 <body>
-    <form action="/sign-up" method="POST">
-  <label for="name">Username</label><br>
-  <input type="text" name="name" required><br><br>
+  <section class="hero is-fullheight">
+    <div class="hero-body has-background-grey-darker " >
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+            <!-- Sign Up Form -->
+            <form action="/sign-up" method="POST" class="box">
+              <div class="field">
+                <label for="name" class="label">Username</label>
+                <div class="control">
+                  <input type="text" name="name" class="input" placeholder="Enter your username" required>
+                </div>
+              </div>
 
-  <label for="email">Email</label><br>
-  <input type="email" name="email" required><br><br>
+              <div class="field">
+                <label for="email" class="label">Email</label>
+                <div class="control">
+                  <input type="email" name="email" class="input" placeholder="e.g., example@email.com" required>
+                </div>
+              </div>
 
-  <label for="password">Password</label><br>
-  <input type="password" name="password" placeholder="********" required><br><br>
+              <div class="field">
+                <label for="password" class="label">Password</label>
+                <div class="control">
+                  <input type="password" name="password" class="input" placeholder="********" required>
+                </div>
+              </div>
 
-  <button type="submit">Sign UP</button>
-</form>
+              <div class="field">
+                <div class="control">
+                  <button type="submit" class="button is-dark is-fullwidth">Sign Up</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </body>
 </html>

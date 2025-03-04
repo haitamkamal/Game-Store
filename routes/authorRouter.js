@@ -177,6 +177,10 @@ authorRouter.get('/category/:categoryName', isAuthenticated, async (req, res) =>
     res.status(500).send('Failed to load games for this category');
   }
 });
+ 
+authorRouter.get("*",(req,res)=>{
+  res.render("error")
 
+})
 
 module.exports = authorRouter;

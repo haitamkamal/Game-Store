@@ -4,48 +4,69 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+  <style>
+    #userMenu {
+      display: none;
+      position: absolute;
+      z-index: 1000; 
+    }
+
+    
+    #userBtn {
+      margin: 10px;
+    }
+  </style>
 </head>
 <body>
-  <a id="userBtn">
-<img src="/uploads/<%= user.profile?.image || 'default-profile.jpg' %>?t=<%= Date.now() %>" 
-     alt="User Profile" style="width: 30px; height: 30px; border-radius: 50%;">
-
-  </a>
-
+  
+  <div class="dropdown is-right" id="userBtn">
+    <div class="dropdown-trigger">
+      <button class="button is-rounded" aria-haspopup="true" aria-controls="userMenu">
+        <img src="/uploads/<%= user.profile?.image || 'default-profile.jpg' %>?t=<%= Date.now() %>" alt="User Profile" style="width: 30px; height: 30px; border-radius: 50%;">
+      </button>
+    </div>
 
   
-  <div id="usernameContainer" style="display: none;">
-    <p>Username: <%= user.name %> </p>
-    <p>Role :<%= user.role%></p>
-    <a href="/manage-account">manage Account</a>
-    <a href="/log-out">Log Out</a>
-    
+<div class="dropdown-menu" id="userMenu" role="menu">
+      <div class="dropdown-content">
+        <div class="dropdown-item">
+          <h3 class="title is-5">Welcome, <%= user.name %>!</h3>
+          <p>Role :<%= user.role%></p>
+        </div>
+        <hr class="dropdown-divider">
+        <a href="/manage-account" class="dropdown-item">Manage Your Account</a>
+
+        <a href="/log-out" class="dropdown-item ">Log Out</a>
+      </div>
+    </div>
   </div>
 
-
-
-
   <script>
-    const userBtn = document.getElementById("userBtn");
-    const usernameContainer = document.getElementById("usernameContainer");
-
-    userBtn.addEventListener("click", function(event) {
+    
+    document.getElementById("userBtn").addEventListener("click", function(event) {
       event.stopPropagation(); 
-
-      if (usernameContainer.style.display === "none" || usernameContainer.style.display === "") {
-        usernameContainer.style.display = "block"; 
+      let userMenu = document.getElementById("userMenu");
+      if (userMenu.style.display === "none" || userMenu.style.display === "") {
+        userMenu.style.display = "block";
       } else {
-        usernameContainer.style.display = "none"; 
+        userMenu.style.display = "none";
       }
     });
+
 
     document.addEventListener("click", function(event) {
-      if (event.target !== userBtn && !usernameContainer.contains(event.target)) {
-        usernameContainer.style.display = "none"; 
+      let userMenu = document.getElementById("userMenu");
+      let userBtn = document.getElementById("userBtn");
+
+     
+      if (event.target !== userMenu && event.target !== userBtn && !userMenu.contains(event.target)) {
+        userMenu.style.display = "none";
       }
     });
 
-    usernameContainer.addEventListener("click", function(event) {
+    
+    document.getElementById("userMenu").addEventListener("click", function(event) {
       event.stopPropagation();
     });
   </script>

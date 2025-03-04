@@ -168,7 +168,7 @@ async function getCategories() {
   }
 }
 
-// Function to get games by category name
+
 async function getGamesByCategory(categoryName) {
   try {
     return await prisma.games.findMany({
@@ -178,12 +178,12 @@ async function getGamesByCategory(categoryName) {
         },
       },
       include: {
-        categories: true, // Include category to access category details in the response
+        categories: true, 
       },
     });
   } catch (error) {
     console.error(`Error fetching games for category ${categoryName}:`, error);
-    throw error;  // Rethrow the error so that it can be caught by the route handler
+    throw error; 
   }
 }
 

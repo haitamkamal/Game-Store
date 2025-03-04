@@ -4,40 +4,56 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Page</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
 </head>
 <body>
-  <%- include('./partails/profile')%>
+  <!-- Navbar -->
+  <nav class="navbar is-flex is-justify-content-flex-end" role="navigation" aria-label="main navigation">
+    <%- include('./partails/profile') %>
+  </nav>
 
- <%- include('./partails/sideBar')%>
+  <!-- Main Container -->
+  <div class="container is-flex">
+    <!-- Sidebar -->
+    <div class="sidebar column is-2">
+      <%- include('./partails/sideBar') %>
+    </div>
 
- <%- include('./partails/addGames')%>
-
-
-  <h1>Games</h1>
-  <div class="game-list">
-    <% if (games && games.length > 0) { %>
-      
-      <% games.forEach(game => { %>
-        <div >
-          <h3><%= game.name %></h3>
-
-          <p>Price: $<%= game.price %></p>
-
-          <p>In Stock: <%= game.inStok %></p>
-        <p>Category: <%= game.categories ? game.categories.name : "Unknown" %></p> 
-              <br>
-         <img src="/uploads/<%= game.image %>" alt="Game Image" width="150" >
-
-        <form action="/deleteMsg/<%= game.id %>" method="post">
-          <button type="submit" >DELETE</button>
-        </form>
-        
+    <!-- Main Content -->
+    <div class="main-content column">
+      <!-- Games List -->
+      <div class="game-list">
+        <h1 class="title">Games</h1>
+        <div class="columns is-multiline">
+          <% if (games && games.length > 0) { %>
+            <% games.forEach(game => { %>
+              <div class="column is-4">
+                <div class="card">
+                  <div class="card-content has-text-centered">
+                    <h3 class="title is-4"><%= game.name %></h3>
+                    <p>Price: $<%= game.price %></p>
+                    <p>In Stock: <%= game.inStok %></p>
+                    <p>Category: <%= game.categories ? game.categories.name : "Unknown" %></p>
+                    <br>
+                    <img src="/uploads/<%= game.image %>" alt="Game Image" width="150">
+                    <form action="/deleteMsg/<%= game.id %>" method="post">
+                      <button type="submit" class="button is-danger">DELETE</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <p class="has-text-centered">No games available.</p>
+          <% } %>
         </div>
-      <% }); %>
-    <% } else { %>
-      <p>No games available.</p>
-    <% } %>
+      </div>
+
+      <!-- Add Game Button -->
+      <div class="add-game-button">
+        <%- include('./partails/addGames') %>
+      </div>
+    </div>
   </div>
-    
 </body>
 </html>

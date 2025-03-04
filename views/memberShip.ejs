@@ -3,14 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VIP</title>
+  <title>VIP Membership</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
 </head>
 <body>
-    <form action="/memberShip" method="post">
-      <label for="role"> <h1>Enter the correct password to be a Vip member</h1> </label><br>
-      
-      <input type="password" name="passwordd" id=""><br><br>
-      <button type="submit" >submit</button>
-    </form>
+  <section class="hero is-fullheight">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+            <!-- VIP Membership Form -->
+            <form action="/memberShip" method="post" class="box">
+              <h1 class="title has-text-centered">Enter the Correct Password to Become a VIP Member</h1>
+              <div class="field">
+                <label for="passwordd" class="label">Password</label>
+                <div class="control">
+                  <input type="password" name="passwordd" class="input" placeholder="Enter the password" required>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="control">
+                  <button type="submit" class="button is-warning is-fullwidth">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </body>
 </html>
