@@ -5,41 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Page</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
-  <style>
-    /* Custom styles */
-    .container-wrapper {
-      display: flex;
-      height: 100vh; /* Full viewport height */
-    }
-
-    .sidebar {
-      width: 250px; /* Fixed width for sidebar */
-      background-color: #f5f5f5; /* Light background for sidebar */
-      padding: 20px;
-    }
-
-    .main-content {
-      flex-grow: 1; /* Take remaining space */
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-    }
-
-    .game-list {
-      flex-grow: 1; /* Take remaining space */
-      overflow-x: auto; /* Add horizontal scroll if content overflows */
-    }
-
-    .add-game-button {
-      margin-top: auto; /* Push the button to the bottom */
-      text-align: right; /* Align button to the right */
-      padding: 20px;
-    }
-
-    .game-tile {
-      margin-right: 20px; /* Add spacing between game tiles */
-    }
-  </style>
 </head>
 <body>
   <!-- Navbar -->
@@ -48,41 +13,36 @@
   </nav>
 
   <!-- Main Container -->
-  <div class="container-wrapper">
+  <div class="container is-flex">
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar column is-2">
       <%- include('./partails/sideBar') %>
     </div>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <div class="main-content column">
       <!-- Games List -->
       <div class="game-list">
         <h1 class="title">Games</h1>
-        <div class="columns is-multiline is-mobile">
+        <div class="columns is-multiline">
           <% if (games && games.length > 0) { %>
             <% games.forEach(game => { %>
-              <div class="column is-one-quarter">
-                <div class="card game-tile">
-                  <div class="card-image">
-                    <figure class="image is-4by3">
-                      <img src="/uploads/<%= game.image %>" alt="Game Image">
-                    </figure>
+              <div class="column is-4">
+                <div class="card">
+                  <div class="card-content has-text-centered">
+                    <h3 class="title is-4"><%= game.name %></h3>
+                    <p>Price: $<%= game.price %></p>
+                    <p>In Stock: <%= game.inStok %></p>
+                    <p>Category: <%= game.categories ? game.categories.name : "Unknown" %></p>
+                    <br>
+                    <img src="/uploads/<%= game.image %>" alt="Game Image" width="150">
+                    
                   </div>
-                  <div class="card-content">
-                    <p class="title is-4"><%= game.name %></p>
-                    <p class="subtitle is-6">Price: $<%= game.price %></p>
-                    <p class="subtitle is-6">In Stock: <%= game.inStok %></p>
-                    <p class="subtitle is-6">Category: <%= game.categories ? game.categories.name : "Unknown" %></p>
-                  </div>
-                 
                 </div>
               </div>
             <% }); %>
           <% } else { %>
-            <div class="column">
-              <p>No games available.</p>
-            </div>
+            <p class="has-text-centered">No games available.</p>
           <% } %>
         </div>
       </div>
