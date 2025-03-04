@@ -11,14 +11,12 @@
   </style>
 </head>
 <body>
-  <h2>Categories</h2>
-  <ul>
-    <% categories.forEach(category => { %>
-      <li><a href=""><%= category.name %></a></li>
-    <% }); %>
-  </ul>
-
-
+<h2>Categories</h2>
+<ul>
+  <% categories.forEach(category => { %>
+    <li><a href="/category/<%= category.name %>"><%= category.name %></a></li>
+  <% }); %>
+</ul>
 
 
 

@@ -136,22 +136,18 @@ const getCategoriesQuery = async () => {
 
 const addGameQuery = async (gameData) => {
   try {
-    const { name, price, inStok, categoriesId, uploadFileName } = gameData;
+    const { name, price, inStok, categoriesId, image } = gameData; 
 
     const priceAsFloat = parseFloat(price);
     const inStokAsInt = parseInt(inStok);
     const categoryIdAsInt = parseInt(categoriesId);
-
-    if (!name || isNaN(priceAsFloat) || isNaN(inStokAsInt) || isNaN(categoryIdAsInt)) {
-      throw new Error("Invalid game data received.");
-    }
 
     const newGame = await prisma.games.create({
       data: {
         name,
         price: priceAsFloat,
         inStok: inStokAsInt,
-        image: uploadFileName || "default-image-games.jpg",
+        image, 
         categoriesId: categoryIdAsInt,
       },
     });
@@ -163,6 +159,35 @@ const addGameQuery = async (gameData) => {
   }
 };
 
+async function getCategories() {
+  try {
+    return await prisma.category.findMany();
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+}
+
+// Function to get games by category name
+async function getGamesByCategory(categoryName) {
+  try {
+    return await prisma.games.findMany({
+      where: {
+        categories: {
+          name: categoryName,
+        },
+      },
+      include: {
+        categories: true, // Include category to access category details in the response
+      },
+    });
+  } catch (error) {
+    console.error(`Error fetching games for category ${categoryName}:`, error);
+    throw error;  // Rethrow the error so that it can be caught by the route handler
+  }
+}
+
+
 
 module.exports ={
   registerUser,
@@ -171,6 +196,9 @@ module.exports ={
   upgradeToAdmin,
   addCategoryQuery,
   getCategoriesQuery,
-  addGameQuery
+  addGameQuery,
+  getCategories,
+  getGamesByCategory
+ 
  
 }

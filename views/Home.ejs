@@ -1,34 +1,33 @@
+<!-- Home.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
-   
 </head>
 <body>
-        <nav class="navbar is-flex is-justify-content-flex-end" role="navigation" aria-label="main navigation">
-          <%- include('./partails/profile')%>
-        </nav>
-        
-           
-    <%- include('./partails/sideBar')%>
-    <%- include('./partails/addGames')%>
+  <nav class="navbar is-flex is-justify-content-flex-end" role="navigation" aria-label="main navigation">
+    <%- include('./partails/profile')%>
+  </nav>
+  
+  <%- include('./partails/sideBar')%>
+  <%- include('./partails/addGames')%>
 
-  <h1>Welcome, <%= user.name %>!</h1>
-  <h2>Games</h2>
+  <h1> All Games</h1>
+
+
   <div class="game-list">
     <% if (games && games.length > 0) { %>
-      
       <% games.forEach(game => { %>
-        <div >
+        <div>
           <h3><%= game.name %></h3>
-
           <p>Price: $<%= game.price %></p>
-
           <p>In Stock: <%= game.inStok %></p>
-
-          <img src="/uploads/default-image-games.jpg" alt="Game Name">
+          <p>Category: <%= game.categories ? game.categories.name : "Unknown" %></p>
+          <br>
+          <img src="/uploads/<%= game.image %>" alt="Game Image" width="150">
         </div>
       <% }); %>
     <% } else { %>
@@ -36,6 +35,6 @@
     <% } %>
   </div>
 
-    <p>if you wana be a vip member <a href="/memberShip">go here</a></p>
+  <p>If you want to be a VIP member <a href="/memberShip">go here</a></p>
 </body>
 </html>

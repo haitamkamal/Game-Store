@@ -1,8 +1,8 @@
 const { Router } = require('express');
 const passport = require('passport');
 const authorRouter = Router();
-const { registerUser,addGameQuery } = require('../db/query');
-const { handleMembership,updateProfileImage, addCategory,getCategories,addGame  } = require('../controller/authorController');
+const { registerUser,getGamesByCategory } = require('../db/query');
+const { handleMembership,updateProfileImage, addCategory,getCategories,addGame, getGames,deleteMsgs } = require('../controller/authorController');
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
@@ -153,17 +153,30 @@ authorRouter.post("/add-categories",isAuthenticated,addCategory);
 
 authorRouter.get("/categories", isAuthenticated, getCategories);
 
+authorRouter.post("/add-games", isAuthenticated, addGame,getGames);
 
-authorRouter.post("/add-games", isAuthenticated, async (req, res) => {
+authorRouter.post("/deleteMsg/:id",deleteMsgs)
+
+
+authorRouter.get('/category/:categoryName', isAuthenticated, async (req, res) => {
+  const { categoryName } = req.params;
+  console.log('Category Name:', categoryName);  
+
   try {
-    console.log("Received form data:", req.body);
-    await addGame(req.body, req, res);
-  } catch (err) {
-    console.error("Error adding game:", err);
-    res.status(500).send("Failed to add game");
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      include: { profile: true },
+    });
+
+    const categories = await prisma.categories.findMany();  
+
+    const games = await getGamesByCategory(categoryName);
+    res.render('category', { games, categoryName, user, categories });  
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Failed to load games for this category');
   }
 });
-
 
 
 module.exports = authorRouter;

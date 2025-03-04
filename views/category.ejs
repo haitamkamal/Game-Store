@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Games in <%= categoryName %></title>
+</head>
+<body>
+<%- include('./partails/profile', { user: user }) %>
+<%- include('./partails/sideBar') %>
+<%- include('./partails/addGames') %>
+
+<h1>Games in <%= categoryName %> Category</h1>
+<div class="game-list">
+  <% if (games && games.length > 0) { %>
+    <% games.forEach(game => { %>
+      <div>
+        <h3><%= game.name %></h3>
+        <p>Price: $<%= game.price %></p>
+        <p>In Stock: <%= game.inStok %></p>
+        <p>Category: <%= game.categories ? game.categories.name : "Unknown" %></p>
+        <br>
+        <img src="/uploads/<%= game.image %>" alt="Game Image" width="150">
+      </div>
+    <% }); %>
+  <% } else { %>
+    <p>No games available in this category.</p>
+  <% } %>
+</div>
+
+  <p><a href="/Home">Back to Home</a></p>
+</body>
+</html>

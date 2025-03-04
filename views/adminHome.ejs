@@ -7,26 +7,37 @@
 </head>
 <body>
   <%- include('./partails/profile')%>
+
  <%- include('./partails/sideBar')%>
+
  <%- include('./partails/addGames')%>
 
-          <h2>Available Games</h2>
-<ul>
-  <% games.forEach(game => { %>
-    <li>
-      <strong><%= game.name %></strong> - $<%= game.price %>
-      <br>
-      In Stock: <%= game.inStok %>
-      <br>
-      Category: <%= game.categoryIdAsInt%>
-      <br>
-   <img src="<%= game.image || 'default-image-games.jpg' %>" alt="<%= game.name %>" width="150">
 
+  <h1>Games</h1>
+  <div class="game-list">
+    <% if (games && games.length > 0) { %>
+      
+      <% games.forEach(game => { %>
+        <div >
+          <h3><%= game.name %></h3>
 
-    </li>
-  <% }) %>
-</ul>
+          <p>Price: $<%= game.price %></p>
 
+          <p>In Stock: <%= game.inStok %></p>
+        <p>Category: <%= game.categories ? game.categories.name : "Unknown" %></p> 
+              <br>
+         <img src="/uploads/<%= game.image %>" alt="Game Image" width="150" >
+
+        <form action="/deleteMsg/<%= game.id %>" method="post">
+          <button type="submit" >DELETE</button>
+        </form>
+        
+        </div>
+      <% }); %>
+    <% } else { %>
+      <p>No games available.</p>
+    <% } %>
+  </div>
     
 </body>
 </html>

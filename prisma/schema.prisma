@@ -51,7 +51,7 @@ model games {
   name         String
   price        Float
   inStok       Int
-  image        String?    @default("default-image-games.jpg")
+  image        String
   categories   categories @relation(fields: [categoriesId], references: [id])
   categoriesId Int
 }

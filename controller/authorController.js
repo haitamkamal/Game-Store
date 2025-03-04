@@ -116,20 +116,60 @@ const getCategories = async (req, res) => {
   }
 };
 
-const addGame = async (gameData, req, res) => {
+const addGame = async (req, res) => {
   try {
-    await addGameQuery(gameData);
-
-    if (req.user.role === "ADMIN") {
-      res.redirect("/Home-admin");
-    } else {
-      res.redirect("/Home");
+   if (!req.files || !req.files.image) {
+      return res.status(400).send("No image uploaded.");
     }
+
+    const imageFile = req.files.image;
+    const uploadPath = path.join(__dirname, "../public/uploads", imageFile.name);
+
+    imageFile.mv(uploadPath, async (err) => {
+      if (err) {
+        console.error("Error saving file:", err);
+        return res.status(500).send("Failed to save image.");
+      }
+
+      const gameData = {
+        ...req.body,
+        image: imageFile.name,
+      };
+
+      console.log("Game Data before saving:", gameData); 
+
+      await addGameQuery(gameData);
+
+      if (req.user.role === "ADMIN") {
+        res.redirect("/Home-admin");
+      } else {
+        res.redirect("/Home");
+      }
+    });
   } catch (err) {
     console.error("Error adding game:", err);
     res.status(500).send("Failed to add game");
   }
 };
+const getGames = async (req, res) => {
+  try {
+    const games = await getGamesQuery();
+    res.json(games);
+  } catch (err) {
+    console.error("Error fetching games:", err);
+    res.status(500).send("Failed to fetch games");
+  }
+};
+
+async function deleteMsgs(req, res) {
+    const gameId =  parseInt (req.params.id);
+    await prisma.games .delete({
+      where:{id:gameId},
+    });
+     console.log(`Game with ID ${gameId} deleted.`);    
+     res.redirect("/Home-admin");
+}
+
 
 
 module.exports = {
@@ -137,6 +177,7 @@ module.exports = {
   updateProfileImage,
   addCategory,
   getCategories,
-  addGame
-  
+  addGame,
+  getGames,
+  deleteMsgs,
 };
